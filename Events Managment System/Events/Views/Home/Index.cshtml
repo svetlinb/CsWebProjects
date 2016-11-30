@@ -1,7 +1,34 @@
-﻿@{
+﻿@model Events.Models.CommingPassedEventsViewModels
+
+@{
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>Events</h1>
+
+<h1>Comming Soon Events</h1>
+
+<div class="row">
+    @if (Model.CommingEvents.Any())
+    {
+        @Html.DisplayFor(e => e.CommingEvents)
+    }
+    else
+    {
+        <h1>No Comming Events</h1>
+    }
 </div>
+<br />
+<br />
+<h1>Passed Events</h1>
+
+<div class="row">
+    @if (Model.PassedEvents.Any())
+    {
+        @Html.DisplayFor(e => e.PassedEvents)
+    }
+    else
+    {
+        <h1>No Passed Events</h1>
+    }
+</div>
+

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A07AC575-9F3D-49A9-B872-6BD43710BFD2}</ProjectGuid>
+    <ProjectGuid>{5EFF3A3D-1FD7-4EA6-92EC-B4991A772210}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Events.Data</RootNamespace>
-    <AssemblyName>Events.Data</AssemblyName>
+    <RootNamespace>Events.Models</RootNamespace>
+    <AssemblyName>Events.Models</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -57,19 +57,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationDbContext.cs" />
-    <Compile Include="Migrations\DbMigrationsConfig.cs" />
+    <Compile Include="ApplicationUser.cs" />
+    <Compile Include="Comment.cs" />
+    <Compile Include="Event.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Events.Models\Events.Models.csproj">
-      <Project>{5eff3a3d-1fd7-4ea6-92ec-b4991a772210}</Project>
-      <Name>Events.Models</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

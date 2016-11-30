@@ -1,11 +1,12 @@
 namespace Events.Data.Migrations
 {
+    using Models;
     using System;
-    using System.Data.Entity;
+    using System.Collections.Generic;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    public sealed class DbMigrationsConfig : DbMigrationsConfiguration<Events.Data.ApplicationDbContext>
+    public sealed class DbMigrationsConfig : DbMigrationsConfiguration<ApplicationDbContext>
     {
         public DbMigrationsConfig()
         {
@@ -13,7 +14,7 @@ namespace Events.Data.Migrations
             AutomaticMigrationDataLossAllowed = true;
         }
 
-        protected override void Seed(Events.Data.ApplicationDbContext context)
+        protected override void Seed(ApplicationDbContext context)
         {
             //This method will be called after migrating to the latest version.
 
@@ -26,7 +27,6 @@ namespace Events.Data.Migrations
             //    new Person { FullName = "Brice Lambson" },
             //    new Person { FullName = "Rowan Miller" }
             //  );
-
         }
     }
 }

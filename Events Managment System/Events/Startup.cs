@@ -1,8 +1,12 @@
 ﻿using Events.Data;
+using Events.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
 using Owin;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 [assembly: OwinStartupAttribute(typeof(Events.Startup))]
 namespace Events
@@ -12,16 +16,86 @@ namespace Events
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-            this.CreateRolesandUsers();
-        }
-
-        // In this method we will create default User roles and Admin user for login   
-        private void CreateRolesandUsers()
-        {
+            
             ApplicationDbContext context = new ApplicationDbContext();
 
+            if (!context.Users.Any())
+            {
+                this.CreateRolesandUsers(context);
+                this.CreateSomeTestEvents(context);
+            }
+        }
+
+
+        private void CreateSomeTestEvents(ApplicationDbContext context)
+        {
+            context.Events.Add(new Event()
+            {
+                Title = "Chill Out Party",
+                StartDate = DateTime.Now.Date.AddDays(-5),
+                Duration = TimeSpan.FromHours(5.0),
+                Author = context.Users.FirstOrDefault(),
+                Comments = new HashSet<Comment>()
+                {
+                    new Comment() {Text = "Some Comment" },
+                    new Comment() {Text = "Some User Comment", Author = context.Users.FirstOrDefault() }
+                },
+                IsPublic = true,
+            });
+
+            context.Events.Add(new Event()
+            {
+                Title = "Dire straits Sofia",
+                StartDate = DateTime.Now.Date.AddDays(3),
+                Duration = TimeSpan.FromHours(5.0),
+                Author = context.Users.FirstOrDefault(),
+                Comments = new HashSet<Comment>()
+                {
+                    new Comment() {Text = "The most eagerly anticipated release from Dire Straits -- their seminal live concert" },
+                    new Comment() {Text = "Dire Straits were a British rock band that formed in Deptford, London, in 1977 by Mark Knopfler his younger brother David Knopfler John Illsley and Pick Withers", Author = context.Users.FirstOrDefault() }
+                },
+                IsPublic = true,
+            });
+
+            context.Events.Add(new Event()
+            {
+                Title = "WhatWDSF WORLD OPEN RUSE 2016",
+                StartDate = DateTime.Now.Date.AddDays(5),
+                Duration = TimeSpan.FromHours(5.0),
+                Author = context.Users.FirstOrDefault(),
+                Comments = new HashSet<Comment>()
+                {
+                    new Comment() {Text = "The most eagerly anticipated release from Dire Straits -- their seminal live concert" },
+                    new Comment() {Text = "Additional information: Tickets will be reserved for 20 minutes when you add them to your shopping cart.", Author = context.Users.FirstOrDefault() }
+                },
+                IsPublic = true,
+            });
+
+
+            context.Events.Add(new Event()
+            {
+                Title = "Snooker European Open 2016",
+                StartDate = DateTime.Now.Date.AddDays(-2),
+                Duration = TimeSpan.FromHours(5.0),
+                IsPublic = true,
+            });
+
+            context.SaveChanges();
+        }
+
+        //In this method we will create default User roles and Admin user for login
+        private void CreateRolesandUsers(ApplicationDbContext context)
+        {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-            var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            userManager.PasswordValidator = new PasswordValidator()
+            {
+                RequiredLength = 6,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
+            };
 
 
             // In Startup iam creating first Admin Role and creating a default Admin User    
@@ -36,16 +110,16 @@ namespace Events
                 //Here we create a Admin super user who will maintain the website 
                 string userPWD = "123123";
                 var user = new ApplicationUser();
-                user.UserName = "admin";
+                user.UserName = "admin@admin.com";
                 user.Email = "admin@admin.com";
                 user.FullName = "Admin admin";
 
-                var chkUser = UserManager.Create(user, userPWD);
+                var chkUser = userManager.Create(user, userPWD);
 
                 //Add default User to Role Admin   
                 if (chkUser.Succeeded)
                 {
-                    var result = UserManager.AddToRole(user.Id, "Admin");
+                    var result = userManager.AddToRole(user.Id, "Admin");
                 }
             }
 

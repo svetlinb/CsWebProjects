@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Events.Data
+namespace Events.Models
 {
     public class Event
     {
         public Event()
         {
-            this.StartDate = new DateTime();
+            //this.StartDate = DateTime.Now;
             this.IsPublic = true;
             this.Comments = new HashSet<Comment>();
         }
@@ -21,8 +19,8 @@ namespace Events.Data
         [Required]
         [MaxLength(200)]
         public string Title { get; set; }
-
-        public DateTime StartDate { get; set; }
+        
+        public DateTime? StartDate { get; set; }
 
         public TimeSpan? Duration { get; set; }
 

@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Events.Data
+namespace Events.Models
 {
     public class Comment
     {
         public Comment()
         {
-            this.Date = new DateTime();
+            this.Date = DateTime.Now;
         }
 
         public int Id { get; set; }
@@ -19,7 +15,7 @@ namespace Events.Data
         [Required]
         public string Text { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         public string AuthorId { get; set; }
 
