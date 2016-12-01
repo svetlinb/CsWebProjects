@@ -26,9 +26,11 @@ else
     <p>No comments</p>
 }
 
-@if (ViewBag.CanEdit)
+@if (ViewBag.hasPermission)
 {
-    @Html.ActionLink("Edit", "Edit", "Events", new { id = Model.Id }, new { @class = "btn btn-default" })
-    <span></span>
-    @Html.ActionLink("Delete", "Delete", "Events", new { id = Model.Id }, new { @class = "btn btn-default" })
+    <div style="float: left">
+        @Html.ActionLink("Edit", "Edit", "Event", new { id = Model.Id }, new { @class = "btn btn-default" })
+
+        @Html.ActionLink("Delete", "Delete", "Event", new { id = Model.Id }, new { @class = "btn btn-default" })
+    </div>
 }

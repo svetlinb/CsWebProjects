@@ -6,16 +6,22 @@ using System.Web.Mvc;
 using Events.Services;
 using Events.Models;
 using Events.Data;
+using Microsoft.AspNet.Identity;
 
 namespace Events.Controllers
 {
     public class HomeController : BaseController
     {
-        
+        IEventsService eventService;
+
+        public HomeController(IEventsService service)
+        {
+            this.eventService = service;
+        }
+
         public ActionResult Index()
         {
-            var EventService = new EventsService();
-            var publicEvents = EventService.GetPublicEvents();
+            var publicEvents = this.eventService.GetPublicEvents();
             var mappedEvents = publicEvents.Select(e => new EventViewModels()
             {
                 Id = e.Id,
@@ -28,18 +34,40 @@ namespace Events.Controllers
             });
 
             var upcomingEvents = mappedEvents.Where(e => e.StartDate > DateTime.Now);
-            var passedEvents = mappedEvents.Where(e => e.StartDate <= DateTime.Now);
+
             return View(new CommingPassedEventsViewModels()
             {
-                CommingEvents = upcomingEvents,
-                PassedEvents = passedEvents
+                CommingEvents = upcomingEvents
             });
         }
 
-        public void EventDetails()
+        public ActionResult EventDetails(int id)
         {
+            var eventService = new EventsService();
+            var isAdmin = this.IsAdmin();
+            var currentUserId = this.User.Identity.GetUserId();
+            var events = this.eventService.GetAllEvents();
 
+            var eventDetails = events
+                .Where(e => e.Id == id)
+                .Select(e => new EventDetailsViewModel()
+                {
+                    Id = e.Id,
+                    Description = e.Description,
+                    Comments = e.Comments.AsQueryable().Select(c => new CommentViewModels()
+                    {
+                        Text = c.Text,
+                        Author = c.Author.FullName
+                    }),
+                    AuthorId = e.Author.Id
+                }).FirstOrDefault();
+
+
+            this.ViewBag.hasPermission = (isAdmin || (eventDetails != null && eventDetails.AuthorId != null && currentUserId == eventDetails.AuthorId));
+
+            return this.PartialView("_AjaxEventDetails", eventDetails);
         }
+
 
         public ActionResult About()
         {

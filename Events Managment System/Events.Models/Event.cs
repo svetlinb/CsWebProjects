@@ -9,7 +9,7 @@ namespace Events.Models
     {
         public Event()
         {
-            //this.StartDate = DateTime.Now;
+            this.StartDate = DateTime.Now;
             this.IsPublic = true;
             this.Comments = new HashSet<Comment>();
         }
