@@ -9,11 +9,13 @@ namespace Events.Services
 {
     public abstract class BaseService
     {
+        protected ApplicationDbContext _context = new ApplicationDbContext();
+
         protected ApplicationDbContext Context
         {
             get
             {
-                return new ApplicationDbContext();
+                return _context;
             }
         }
     }

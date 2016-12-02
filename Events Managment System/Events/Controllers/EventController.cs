@@ -9,13 +9,15 @@ using System.Data.Entity;
 
 namespace Events.Controllers
 {
+    [Authorize]
     public class EventController : BaseController
     {
         public ActionResult Show()
         {
             string currentUserId = this.User.Identity.GetUserId();
+            var isAdmin = this.IsAdmin();
             var mappedEvents = this.Context.Events
-                .Where(e => e.AuthorId == currentUserId)
+                .Where(e => e.AuthorId == currentUserId || isAdmin)
                 .OrderBy(e => e.StartDate)
                 .Select(e => new EventViewModels()
                 {
