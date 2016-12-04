@@ -20,9 +20,9 @@ namespace Events.Areas.Admin.Controllers
 
         public ActionResult Index()
         {
-            IEnumerable<ListUsersViewModels> users = this.service.GetAllUsers()
+            IEnumerable<UsersViewModels> users = this.service.GetAllUsers()
                 .OrderBy(u => u.FullName)
-                .Select(u => new ListUsersViewModels()
+                .Select(u => new UsersViewModels()
                 {
                     Id = u.Id,
                     FullName = u.FullName,
@@ -33,7 +33,14 @@ namespace Events.Areas.Admin.Controllers
             return View(users);
         }
 
+        [HttpGet]
         public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Create(UsersViewModels model)
         {
             return View();
         }

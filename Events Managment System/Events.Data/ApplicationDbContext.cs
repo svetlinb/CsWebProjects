@@ -22,5 +22,6 @@ namespace Events.Data
         {
             return new ApplicationDbContext();
         }
+
     }
 }
