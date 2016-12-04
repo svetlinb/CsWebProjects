@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Events.Areas.Admin.ViewModels;
+using Events.Data;
+using Events.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,15 +12,40 @@ namespace Events.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
-        // GET: Admin/User
+        private UserService service;
+        public UserController(UserService _service)
+        {
+            this.service = _service;
+        }
+
         public ActionResult Index()
+        {
+            IEnumerable<ListUsersViewModels> users = this.service.GetAllUsers()
+                .OrderBy(u => u.FullName)
+                .Select(u => new ListUsersViewModels()
+                {
+                    Id = u.Id,
+                    FullName = u.FullName,
+                    UserName = u.UserName,
+                    Email = u.Email,
+                    PhoneNumber = u.PhoneNumber
+                });
+            return View(users);
+        }
+
+        public ActionResult Create()
         {
             return View();
         }
 
-        public ActionResult CreateUser()
+        public ActionResult Edit()
         {
-            return RedirectToAction("Register", "Account");
+            return View();
+        }
+
+        public ActionResult Delete()
+        {
+            return View();
         }
     }
 }

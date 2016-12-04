@@ -6,18 +6,26 @@ using System.Web.Mvc;
 using Events.Models;
 using Microsoft.AspNet.Identity;
 using System.Data.Entity;
+using Events.Services;
 
 namespace Events.Controllers
 {
     [Authorize]
     public class EventController : BaseController
     {
+        EventsService eventService;
+
+        public EventController(EventsService service)
+        {
+            this.eventService = service;
+        }
         public ActionResult Show()
         {
             string currentUserId = this.User.Identity.GetUserId();
             var isAdmin = this.IsAdmin();
-            var mappedEvents = this.Context.Events
-                .Where(e => e.AuthorId == currentUserId || isAdmin)
+            var allEvents = this.eventService.GetAllEvents();
+            var mappedEvents = allEvents
+                .Where(e => e.IsPublic || isAdmin || (e.AuthorId == currentUserId))
                 .OrderBy(e => e.StartDate)
                 .Select(e => new EventViewModels()
                 {
@@ -31,12 +39,9 @@ namespace Events.Controllers
                 });
 
 
-            var upcomingEvents = mappedEvents.Where(e => e.StartDate >= DateTime.Now);
+            IEnumerable<EventViewModels> events = mappedEvents;
 
-            return View(new CommingPassedEventsViewModels()
-            {
-                CommingEvents = upcomingEvents
-            });
+            return View(events);
         }
 
         [HttpGet]
@@ -62,9 +67,9 @@ namespace Events.Controllers
                     IsPublic = model.IsPublic
                 };
                 
-                this.Context.Entry(e).State = EntityState.Added;
-                this.Context.Events.Add(e);
-                this.Context.SaveChanges();
+                this.eventService.Context.Entry(e).State = EntityState.Added;
+                this.eventService.Context.Events.Add(e);
+                this.eventService.Context.SaveChanges();
                 
                 return this.RedirectToAction("Show");
             }
@@ -104,7 +109,7 @@ namespace Events.Controllers
                 eventToEdit.Location = model.Location;
                 eventToEdit.IsPublic = model.IsPublic;
 
-                this.Context.SaveChanges();
+                this.eventService.Context.SaveChanges();
                 
                 return this.RedirectToAction("Show");
             }
@@ -135,8 +140,8 @@ namespace Events.Controllers
                 return this.RedirectToAction("Show");
             }
 
-            this.Context.Events.Remove(eventToDelete);
-            this.Context.SaveChanges();
+            this.eventService.Context.Events.Remove(eventToDelete);
+            this.eventService.Context.SaveChanges();
            
             return this.RedirectToAction("Show");
         }
@@ -145,7 +150,7 @@ namespace Events.Controllers
         {
             var currentUserId = this.User.Identity.GetUserId();
             var isAdmin = this.IsAdmin();
-            var eventToEdit = this.Context.Events
+            var eventToEdit = this.eventService.Context.Events
                 .Where(e => e.Id == id)
                 .FirstOrDefault(e => e.AuthorId == currentUserId || isAdmin);
             return eventToEdit;

@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace Events.Services
 {
-    public class EventsService : BaseService, IEventsService
+    public class EventsService : BaseService
     {
+        
         public IQueryable<Event> GetAllEvents()
         {
             return Context.Events

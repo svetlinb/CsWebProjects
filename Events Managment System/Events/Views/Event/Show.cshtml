@@ -1,4 +1,4 @@
-﻿@model Events.Models.CommingPassedEventsViewModels
+﻿@model  IEnumerable<EventViewModels>
 
 @{
     ViewBag.Title = "My Events";
@@ -7,9 +7,9 @@
 <h1>My Events</h1>
 
 <div class="row">
-    @if (Model.CommingEvents.Any())
+    @if (Model.Any())
     {
-        foreach (var post in Model.CommingEvents)
+        foreach (var post in Model)
         {
             <div class="col-md-4 col-sm-6 col-xs-12">
                 <div class="event-box">

@@ -63,7 +63,7 @@ namespace Events.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<IEventsService>().To<EventsService>()
+            kernel.Bind<IBaseService>().To<BaseService>()
                .InRequestScope();
         }        
     }

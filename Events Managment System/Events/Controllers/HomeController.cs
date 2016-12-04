@@ -12,9 +12,9 @@ namespace Events.Controllers
 {
     public class HomeController : BaseController
     {
-        IEventsService eventService;
+        EventsService eventService;
 
-        public HomeController(IEventsService service)
+        public HomeController(EventsService service)
         {
             this.eventService = service;
         }

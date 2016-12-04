@@ -18,11 +18,12 @@
                 </button>
                 @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
 
-                @Html.ActionLink("Create User", "Register", "Account", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Add User", "Create", "Account", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                 </ul>
+                @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>

@@ -10,15 +10,6 @@ namespace Events.Controllers
 {
     public abstract class BaseController : Controller
     {
-        protected ApplicationDbContext _context = new ApplicationDbContext();
-
-        protected ApplicationDbContext Context
-        {
-            get
-            {
-                return _context;
-            }
-        }
 
         public bool IsAdmin()
         {
