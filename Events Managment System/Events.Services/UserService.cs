@@ -46,6 +46,20 @@ namespace Events.Services
             }
         }
 
+        public ApplicationUser GetUserById(string id)
+        {
+            var user = this.userManager.FindById(id);
+
+            return user;
+        }
+
+        public string GetUserRoleById(string id)
+        {
+            var user = this.userManager.GetRoles(id);
+
+            return user.FirstOrDefault();
+        }
+
         public void DeleteUser(string id)
         {
             var user = this.userManager.FindById(id);

@@ -66,9 +66,27 @@ namespace Events.Areas.Admin.Controllers
             return View(model);
         }
 
-        public ActionResult Edit()
+        [HttpGet]
+        public ActionResult Edit(string id)
         {
-            return View();
+            var user = this.service.GetUserById(id);
+            var userRole = this.service.GetUserRoleById(id);
+
+            if(user == null || userRole == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            UsersViewModels userView = new UsersViewModels()
+            {
+                UserName = user.UserName,
+                FullName = user.FullName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                UserRoles = userRole
+            };
+
+            return View(userView);
         }
 
         public ActionResult Delete(string id)
