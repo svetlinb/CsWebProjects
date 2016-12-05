@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Events.Models;
 using Events.Data;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Events.Controllers
 {
@@ -148,12 +149,20 @@ namespace Events.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model, ApplicationDbContext context)
         {
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName };
                 var result = await UserManager.CreateAsync(user, model.Password);
+
+                var roleStore = new RoleStore<IdentityRole>(context);
+                var roleManager = new RoleManager<IdentityRole>(roleStore);
+
+                var userStore = new UserStore<ApplicationUser>(context);
+                var userManager = new UserManager<ApplicationUser>(userStore);
+                userManager.AddToRole(user.Id, "User");
+
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);

@@ -1,5 +1,6 @@
 ﻿using Events.Areas.Admin.ViewModels;
 using Events.Data;
+using Events.Models;
 using Events.Services;
 using System;
 using System.Collections.Generic;
@@ -30,19 +31,39 @@ namespace Events.Areas.Admin.Controllers
                     Email = u.Email,
                     PhoneNumber = u.PhoneNumber
                 });
+
             return View(users);
         }
 
         [HttpGet]
         public ActionResult Create()
         {
+            ViewBag.UserRoles = (IEnumerable<SelectListItem>)this.service.GetUserRoles();
             return View();
         }
 
         [HttpPost]
         public ActionResult Create(UsersViewModels model)
         {
-            return View();
+            if (model != null && this.ModelState.IsValid)
+            {
+                User user = new User()
+                {
+                    UserName = model.UserName,
+                    FullName = model.FullName,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
+                    UserRoles = model.UserRoles
+                };
+
+                this.service.AddUser(user);
+
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.UserRoles = (IEnumerable<SelectListItem>)this.service.GetUserRoles();
+
+            return View(model);
         }
 
         public ActionResult Edit()
@@ -50,9 +71,11 @@ namespace Events.Areas.Admin.Controllers
             return View();
         }
 
-        public ActionResult Delete()
+        public ActionResult Delete(string id)
         {
-            return View();
+            this.service.DeleteUser(id);
+
+            return RedirectToAction("Index");
         }
     }
 }
