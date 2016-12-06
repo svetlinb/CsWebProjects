@@ -46,6 +46,34 @@ namespace Events.Services
             }
         }
 
+        public void EditUser(string id, User model)
+        {
+            var user = this.GetUserById(id);
+            var userRole = this.GetUserRoleById(id);
+
+            user.Email = model.Email;
+            user.FullName = model.FullName;
+            user.UserName = model.Email;
+            user.PhoneNumber = model.PhoneNumber;
+            user.UserRoles = model.UserRoles;
+
+            var chkUser = this.userManager.Update(user);
+
+            if(chkUser.Succeeded)
+            {
+                if (user.Roles.FirstOrDefault().ToString() != userRole)
+                {
+                    this.userManager.RemoveFromRole(user.Id, userRole);
+                    this.userManager.AddToRole(user.Id, model.UserRoles);
+                }
+            }
+            else
+            {
+                throw new ApplicationException("Unable to update user.");
+            }
+
+        }
+
         public ApplicationUser GetUserById(string id)
         {
             var user = this.userManager.FindById(id);

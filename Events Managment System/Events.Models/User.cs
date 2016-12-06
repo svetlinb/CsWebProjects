@@ -22,7 +22,7 @@ namespace Events.Models
         
         public string PhoneNumber { get; set; }
 
-        [NotMapped]
+        
         public string UserRoles { get; set; }
     }
 }

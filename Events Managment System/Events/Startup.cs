@@ -32,7 +32,7 @@ namespace Events
             context.Events.Add(new Event()
             {
                 Title = "Chill Out Party",
-                StartDate = DateTime.Now.Date.AddDays(-5),
+                StartDate = DateTime.Now.Date.AddDays(5),
                 Duration = TimeSpan.FromHours(5.0),
                 Author = context.Users.FirstOrDefault(),
                 Comments = new HashSet<Comment>()
@@ -75,7 +75,7 @@ namespace Events
             context.Events.Add(new Event()
             {
                 Title = "Snooker European Open 2016",
-                StartDate = DateTime.Now.Date.AddDays(-2),
+                StartDate = DateTime.Now.Date.AddDays(-1),
                 Duration = TimeSpan.FromHours(5.0),
                 IsPublic = true,
             });
