@@ -11,14 +11,14 @@ using System.Web.Mvc;
 
 namespace Events.Services
 {
-    public class UserService : BaseService
+    public class UserService : BaseService, IUserService
     {
 
         public IQueryable<ApplicationUser> GetAllUsers()
         {
             return Context.Users.OrderBy(u => u.FullName);
         }
-        public SelectList GetUserRoles()
+        public IEnumerable<SelectListItem> GetUserRoles()
         {
             return new SelectList(Context.Roles.Where(r => !r.Name.Contains("Admin")).ToList(),"Name", "Name");
         }
@@ -33,6 +33,7 @@ namespace Events.Services
                 FullName = model.FullName,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
+                UserRoles = model.UserRoles,
             };
 
             var chkUser = this.userManager.Create(user, defaultUserPassword);

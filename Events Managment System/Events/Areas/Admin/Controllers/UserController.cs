@@ -16,8 +16,8 @@ namespace Events.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class UserController : BaseController
     {
-        private UserService service;
-        public UserController(UserService _service)
+        private IUserService service;
+        public UserController(IUserService _service)
         {
             this.service = _service;
         }
@@ -32,7 +32,8 @@ namespace Events.Areas.Admin.Controllers
                     FullName = u.FullName,
                     UserName = u.UserName,
                     Email = u.Email,
-                    PhoneNumber = u.PhoneNumber
+                    PhoneNumber = u.PhoneNumber,
+                    UserRoles = u.UserRoles,
                 });
 
             return View(users);
@@ -65,7 +66,7 @@ namespace Events.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.UserRoles = (IEnumerable<SelectListItem>)this.service.GetUserRoles();
+            ViewBag.UserRoles = this.service.GetUserRoles();
 
             return View(model);
         }

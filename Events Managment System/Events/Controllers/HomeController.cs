@@ -7,19 +7,21 @@ using Events.Services;
 using Events.Models;
 using Events.Data;
 using Microsoft.AspNet.Identity;
+using PagedList;
 
 namespace Events.Controllers
 {
     public class HomeController : BaseController
     {
-        EventsService eventService;
+        IEventsService eventService;
 
-        public HomeController(EventsService service)
+        public HomeController(IEventsService service)
         {
             this.eventService = service;
         }
 
-        public ActionResult Index()
+        [HttpGet]
+        public ActionResult Index(int page=1, int pageSize=6)
         {
             var publicEvents = this.eventService.GetPublicEvents();
             var mappedEvents = publicEvents.Select(e => new EventViewModels()
@@ -33,12 +35,10 @@ namespace Events.Controllers
                 Location = e.Location,
             });
 
-            var upcomingEvents = mappedEvents.Where(e => e.StartDate > DateTime.Now);
+            IEnumerable<EventViewModels> events = mappedEvents.OrderBy(e => e.StartDate);
+            var model = new PagedList<EventViewModels>(events, page, pageSize);
 
-            return View(new CommingPassedEventsViewModels()
-            {
-                CommingEvents = upcomingEvents
-            });
+            return View(model);
         }
 
         public ActionResult EventDetails(int id)

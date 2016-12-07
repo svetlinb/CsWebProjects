@@ -65,6 +65,10 @@ namespace Events.App_Start
         {
             kernel.Bind<IBaseService>().To<BaseService>()
                .InRequestScope();
+            kernel.Bind<IUserService>().To<UserService>()
+               .InRequestScope();
+            kernel.Bind<IEventsService>().To<EventsService>()
+               .InRequestScope();
         }        
     }
 }

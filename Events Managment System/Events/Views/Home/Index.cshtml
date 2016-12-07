@@ -1,15 +1,18 @@
-﻿@model Events.Models.CommingPassedEventsViewModels
+﻿@model PagedList<EventViewModels>
 
 @{
     ViewBag.Title = "Home Page";
 }
 
-<h1>Comming Soon Events</h1>
+@using PagedList.Mvc; 
+@using PagedList;
+
+<h1 style="text-decoration: underline;color: #468d84">All Available Events</h1>
 
 <div class="row">
-    @if (Model.CommingEvents.Any())
+    @if (Model.Any())
     {
-        foreach (var post in Model.CommingEvents)
+        foreach (var post in Model)
         {
             <div class="col-md-4 col-sm-6 col-xs-12">
                 <div class="event-box">
@@ -45,6 +48,9 @@
         <h1>No Comming Events</h1>
     }
 </div>
+
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, pageSize = Model.PageSize }))
 
 @section scripts{
     @Scripts.Render("~/bundles/ajax")

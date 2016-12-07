@@ -25,7 +25,7 @@ namespace Events.Controllers
             var isAdmin = this.IsAdmin();
             var allEvents = this.eventService.GetAllEvents();
             var mappedEvents = allEvents
-                .Where(e => e.IsPublic || isAdmin || (e.AuthorId == currentUserId))
+                .Where(e => e.AuthorId == currentUserId || isAdmin)
                 .OrderBy(e => e.StartDate)
                 .Select(e => new EventViewModels()
                 {

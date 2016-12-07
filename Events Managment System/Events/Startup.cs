@@ -59,7 +59,63 @@ namespace Events
 
             context.Events.Add(new Event()
             {
-                Title = "WhatWDSF WORLD OPEN RUSE 2016",
+                Title = "Dire straits Plovdiv",
+                StartDate = DateTime.Now.Date.AddDays(3),
+                Duration = TimeSpan.FromHours(5.0),
+                Author = context.Users.FirstOrDefault(),
+                Comments = new HashSet<Comment>()
+                {
+                    new Comment() {Text = "The most eagerly anticipated release from Dire Straits -- their seminal live concert" },
+                    new Comment() {Text = "Dire Straits were a British rock band that formed in Deptford, London, in 1977 by Mark Knopfler his younger brother David Knopfler John Illsley and Pick Withers", Author = context.Users.FirstOrDefault() }
+                },
+                IsPublic = true,
+            });
+
+            context.Events.Add(new Event()
+            {
+                Title = "Dire straits Varna",
+                StartDate = DateTime.Now.Date.AddDays(3),
+                Duration = TimeSpan.FromHours(5.0),
+                Author = context.Users.FirstOrDefault(),
+                Comments = new HashSet<Comment>()
+                {
+                    new Comment() {Text = "The most eagerly anticipated release from Dire Straits -- their seminal live concert" },
+                    new Comment() {Text = "Dire Straits were a British rock band that formed in Deptford, London, in 1977 by Mark Knopfler his younger brother David Knopfler John Illsley and Pick Withers", Author = context.Users.FirstOrDefault() }
+                },
+                IsPublic = true,
+            });
+
+            context.Events.Add(new Event()
+            {
+                Title = "Dire straits Ruse",
+                StartDate = DateTime.Now.Date.AddDays(3),
+                Duration = TimeSpan.FromHours(5.0),
+                Author = context.Users.FirstOrDefault(),
+                Comments = new HashSet<Comment>()
+                {
+                    new Comment() {Text = "The most eagerly anticipated release from Dire Straits -- their seminal live concert" },
+                    new Comment() {Text = "Dire Straits were a British rock band that formed in Deptford, London, in 1977 by Mark Knopfler his younger brother David Knopfler John Illsley and Pick Withers", Author = context.Users.FirstOrDefault() }
+                },
+                IsPublic = true,
+            });
+
+            context.Events.Add(new Event()
+            {
+                Title = "Dire straits Burgas",
+                StartDate = DateTime.Now.Date.AddDays(3),
+                Duration = TimeSpan.FromHours(5.0),
+                Author = context.Users.FirstOrDefault(),
+                Comments = new HashSet<Comment>()
+                {
+                    new Comment() {Text = "The most eagerly anticipated release from Dire Straits -- their seminal live concert" },
+                    new Comment() {Text = "Dire Straits were a British rock band that formed in Deptford, London, in 1977 by Mark Knopfler his younger brother David Knopfler John Illsley and Pick Withers", Author = context.Users.FirstOrDefault() }
+                },
+                IsPublic = true,
+            });
+
+            context.Events.Add(new Event()
+            {
+                Title = "WDSF WORLD OPEN 2016",
                 StartDate = DateTime.Now.Date.AddDays(5),
                 Duration = TimeSpan.FromHours(5.0),
                 Author = context.Users.FirstOrDefault(),
@@ -75,6 +131,38 @@ namespace Events
             context.Events.Add(new Event()
             {
                 Title = "Snooker European Open 2016",
+                StartDate = DateTime.Now.Date.AddDays(-1),
+                Duration = TimeSpan.FromHours(5.0),
+                IsPublic = true,
+            });
+
+            context.Events.Add(new Event()
+            {
+                Title = "Snooker European Open2 2016",
+                StartDate = DateTime.Now.Date.AddDays(-1),
+                Duration = TimeSpan.FromHours(5.0),
+                IsPublic = true,
+            });
+
+            context.Events.Add(new Event()
+            {
+                Title = "Snooker European Open3 2016",
+                StartDate = DateTime.Now.Date.AddDays(-1),
+                Duration = TimeSpan.FromHours(5.0),
+                IsPublic = true,
+            });
+
+            context.Events.Add(new Event()
+            {
+                Title = "Snooker European Open4 2016",
+                StartDate = DateTime.Now.Date.AddDays(-1),
+                Duration = TimeSpan.FromHours(5.0),
+                IsPublic = true,
+            });
+
+            context.Events.Add(new Event()
+            {
+                Title = "Snooker European Open5 2016",
                 StartDate = DateTime.Now.Date.AddDays(-1),
                 Duration = TimeSpan.FromHours(5.0),
                 IsPublic = true,
