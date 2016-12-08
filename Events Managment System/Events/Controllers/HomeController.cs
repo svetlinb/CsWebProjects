@@ -8,6 +8,7 @@ using Events.Models;
 using Events.Data;
 using Microsoft.AspNet.Identity;
 using PagedList;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Events.Controllers
 {
@@ -24,21 +25,26 @@ namespace Events.Controllers
         public ActionResult Index(int page=1, int pageSize=6)
         {
             var publicEvents = this.eventService.GetPublicEvents();
-            var mappedEvents = publicEvents.Select(e => new EventViewModels()
+            IPagedList<EventViewModels> model = null;
+
+            if (publicEvents != null && publicEvents.Any())
             {
-                Id = e.Id,
-                Title = e.Title,
-                StartDate = e.StartDate,
-                Duration = e.Duration,
-                Author = e.Author.FullName,
-                Description = e.Description,
-                Location = e.Location,
-            });
+                var mappedEvents = publicEvents.Select(e => new EventViewModels()
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    StartDate = e.StartDate,
+                    Duration = e.Duration,
+                    Author = e.Author.FullName,
+                    Description = e.Description,
+                    Location = e.Location,
+                });
 
-            IEnumerable<EventViewModels> events = mappedEvents.OrderBy(e => e.StartDate);
-            var model = new PagedList<EventViewModels>(events, page, pageSize);
+                IEnumerable<EventViewModels> events = mappedEvents.OrderBy(e => e.StartDate);
+                model = events.ToPagedList(page, pageSize);
+            }
 
-            return View(model);
+            return View("Index", model);
         }
 
         public ActionResult EventDetails(int id)
@@ -80,7 +86,7 @@ namespace Events.Controllers
         {
             ViewBag.Message = "Your contact page.";
 
-            return View();
+            return View("Contact");
         }
     }
 }

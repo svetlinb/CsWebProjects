@@ -9,56 +9,111 @@ using Events.Controllers;
 using Events.Services;
 using Moq;
 using System.ComponentModel;
+using Events.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Events.Tests.Controllers
 {
     [TestClass]
     public class HomeControllerTest
     {
-        IEventsService service;
-        public HomeControllerTest()
+        private IEventsService service;
+        private Mock<IEventsService> mockRepository;
+        private HomeController homeController;
+        List<Event> events;
+        List<Event> eventsIncorrect;
+        ApplicationUser dummyUser;
+
+        [TestInitialize]
+        public void Initialize()
         {
-            Mock<IEventsService> mockView = new Mock<IEventsService>();
-            service = mockView.Object;
+            this.mockRepository = new Mock<IEventsService>();
+            this.service = mockRepository.Object;
+            this.homeController = new HomeController(service);
+            this.dummyUser = new ApplicationUser() { UserName = "t@t.com", Email = "t@t.com", FullName = "Admin" };
+            events = new List<Event>() {
+                new Event()
+                {
+                    Id = 1,
+                    Title = "Test Event1",
+                    StartDate = DateTime.Now,
+                    Duration = TimeSpan.FromHours(10.00),
+                    Author = dummyUser,
+                    Description = "some description bla bla",
+                    Location = "BG",
+                },
+            };
+
+            eventsIncorrect = new List<Event>() {
+                new Event()
+                {
+                    Id = 1,
+                    Title = "Test Event1",
+                    Description = "some description bla bla",
+                    Location = "BG",
+                },
+            };
         }
 
         [TestMethod]
-        public void Index()
+        public void TestIndexViewModel()
         {
-            // Arrange
-            HomeController controller = new HomeController(service);
+            ViewResult result = this.homeController.Index() as ViewResult;
+            
+            Assert.IsTrue(string.IsNullOrEmpty(result.ViewName) || result.ViewName == "Index");
+        }
 
-            // Act
-            ViewResult result = controller.Index() as ViewResult;
+        [TestMethod]
+        public void TestIndexViewDataWithDummyData()
+        {
+            IQueryable<Event> mockedEvents = events.AsQueryable();
+            this.mockRepository.Setup(t => t.GetPublicEvents()).Returns(mockedEvents);
+            ViewResult result = this.homeController.Index() as ViewResult;
 
-            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Model);
+        }
+
+        [TestMethod]
+        public void TestIndexWithoutData()
+        {
+            IQueryable<Event> mockedEvents = null;
+            this.mockRepository.Setup(t => t.GetPublicEvents()).Returns(mockedEvents);
+            ViewResult result = this.homeController.Index() as ViewResult;
+            
+            Assert.IsNull(result.Model);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void TestIndexViewDataWithIncorrectData()
+        {
+            IQueryable<Event> incorrectMockedEvents = eventsIncorrect.AsQueryable();
+            this.mockRepository.Setup(t => t.GetPublicEvents()).Returns(incorrectMockedEvents);
+            ViewResult result = this.homeController.Index() as ViewResult;
+
             Assert.IsNotNull(result);
         }
 
         [TestMethod]
         public void About()
         {
-            // Arrange
             HomeController controller = new HomeController(service);
-
-            // Act
             ViewResult result = controller.About() as ViewResult;
-
-            // Assert
+            
             Assert.AreEqual("Your application description page.", result.ViewBag.Message);
+            Assert.IsTrue(string.IsNullOrEmpty(result.ViewName) || result.ViewName == "About");
         }
 
         [TestMethod]
         public void Contact()
         {
-            // Arrange
             HomeController controller = new HomeController(service);
-
-            // Act
             ViewResult result = controller.Contact() as ViewResult;
-
-            // Assert
+            
             Assert.IsNotNull(result);
+            Assert.IsTrue(string.IsNullOrEmpty(result.ViewName) || result.ViewName == "Contact");
         }
     }
 }
