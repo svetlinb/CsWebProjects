@@ -11,6 +11,7 @@ using Moq;
 using System.ComponentModel;
 using Events.Models;
 using Microsoft.AspNet.Identity;
+using PagedList;
 
 namespace Events.Tests.Controllers
 {
@@ -42,6 +43,16 @@ namespace Events.Tests.Controllers
                     Description = "some description bla bla",
                     Location = "BG",
                 },
+                new Event()
+                {
+                    Id = 2,
+                    Title = "Test Event1",
+                    StartDate = DateTime.Now,
+                    Duration = TimeSpan.FromHours(10.00),
+                    Author = dummyUser,
+                    Description = "some description bla bla",
+                    Location = "BG",
+                },
             };
 
             eventsIncorrect = new List<Event>() {
@@ -58,8 +69,10 @@ namespace Events.Tests.Controllers
         [TestMethod]
         public void TestIndexViewModel()
         {
+            IQueryable<Event> mockedEvents = events.AsQueryable();
+            this.mockRepository.Setup(t => t.GetPublicEvents()).Returns(mockedEvents);
             ViewResult result = this.homeController.Index() as ViewResult;
-            
+
             Assert.IsTrue(string.IsNullOrEmpty(result.ViewName) || result.ViewName == "Index");
         }
 
@@ -77,11 +90,11 @@ namespace Events.Tests.Controllers
         [TestMethod]
         public void TestIndexWithoutData()
         {
-            IQueryable<Event> mockedEvents = null;
+            IQueryable<Event> mockedEvents = new List<Event>().AsQueryable();
             this.mockRepository.Setup(t => t.GetPublicEvents()).Returns(mockedEvents);
             ViewResult result = this.homeController.Index() as ViewResult;
-            
-            Assert.IsNull(result.Model);
+
+            Assert.AreEqual(null, result);
         }
 
 

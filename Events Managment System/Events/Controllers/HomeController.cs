@@ -8,7 +8,6 @@ using Events.Models;
 using Events.Data;
 using Microsoft.AspNet.Identity;
 using PagedList;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Events.Controllers
 {
@@ -24,10 +23,10 @@ namespace Events.Controllers
         [HttpGet]
         public ActionResult Index(int page=1, int pageSize=6)
         {
-            var publicEvents = this.eventService.GetPublicEvents();
-            IPagedList<EventViewModels> model = null;
+            IQueryable<Event> publicEvents = this.eventService.GetPublicEvents();
+            
 
-            if (publicEvents != null && publicEvents.Any())
+            if (publicEvents.Any())
             {
                 var mappedEvents = publicEvents.Select(e => new EventViewModels()
                 {
@@ -41,10 +40,12 @@ namespace Events.Controllers
                 });
 
                 IEnumerable<EventViewModels> events = mappedEvents.OrderBy(e => e.StartDate);
-                model = events.ToPagedList(page, pageSize);
+                var model = events.ToPagedList(page, pageSize);
+
+                return View("Index", model);
             }
 
-            return View("Index", model);
+            return new EmptyResult();
         }
 
         public ActionResult EventDetails(int id)

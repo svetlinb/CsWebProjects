@@ -153,7 +153,7 @@ namespace Events.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName, UserRoles = "User" };
                 var result = await UserManager.CreateAsync(user, model.Password);
 
                 var roleStore = new RoleStore<IdentityRole>(context);
